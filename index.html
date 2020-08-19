@@ -17,7 +17,10 @@
   
   Stream URL:
   
-  <input type="text" placeholder="paste your link here" value="https://livesim.dashif.org/livesim/chunkdur_1/ato_7/testpic4_8s/Manifest.mpd" id="myInput">
+  <input type="text" placeholder="paste your link here" value="https://livesim.dashif.org/livesim/chunkdur_1/ato_7/testpic4_8s/Manifest.mpd" id="myInput"> <br/>
+  BuyDrm token:
+  
+  <input type="text" placeholder="paste encrypted key(Optional)"  id="encstr">
         
   <button id="change">change video</button>
   <br/>
@@ -36,22 +39,14 @@
       player.httpSourceSelector();
       //Load stream from query param /?stream=MYHLS_STREAM_URL_GOES_HERE
        // Init eme plugin to work with DRM. Set header common for all license related requests: https://github.com/videojs/videojs-contrib-eme/tree/v3.5.0#emeheaders
-       player.eme({
-                // If you are using proxy, please, remove 'emeHeaders' block. Only 'player.eme();' should stay to register eme plugin.
-                emeHeaders: {
-                    'customdata': 'PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxLZXlPU0F1dGhlbnRpY2F0aW9uWE1MPjxEYXRhPjxXaWRldmluZVBvbGljeSBmbF9DYW5QZXJzaXN0PSJmYWxzZSIgZmxfQ2FuUGxheT0idHJ1ZSIvPjxXaWRldmluZUNvbnRlbnRLZXlTcGVjIFRyYWNrVHlwZT0iSEQiPjxTZWN1cml0eUxldmVsPjE8L1NlY3VyaXR5TGV2ZWw+PC9XaWRldmluZUNvbnRlbnRLZXlTcGVjPjxGYWlyUGxheVBvbGljeSBwZXJzaXN0ZW50PSJmYWxzZSIvPjxMaWNlbnNlIHR5cGU9InNpbXBsZSIvPjxHZW5lcmF0aW9uVGltZT4yMDIwLTA4LTE5IDExOjE1OjI4LjAwMDwvR2VuZXJhdGlvblRpbWU+PEV4cGlyYXRpb25UaW1lPjIwMjAtMDgtMTkgMTE6MzA6MjguMDAwPC9FeHBpcmF0aW9uVGltZT48VW5pcXVlSWQ+NjVhZTQ1OWJlMDM3NTA2NWQ1MjZjNzJmZmJjNDE5YWI8L1VuaXF1ZUlkPjxSU0FQdWJLZXlJZD45NzU0ZTBjZmRkYzY4MmMyMTIxNmRlM2ViNGQxMTg4NTwvUlNBUHViS2V5SWQ+PC9EYXRhPjxTaWduYXR1cmU+UUgwNnBJcmFOMFRDZUFrOXNaNEF6UnBGZ2NqczZiVEdFbStrWGZtMzRxOFBldHRzUS81TitMaHV4T2lsQlMzRHBaMVJCTkpUK2pydTlNa0xiOWFpSEVvcnQ5TGsrV1N1clhRVGZVU0NBUkk5MGNhdzR2Rk9Dd3I2QjNLa1JGUHBhdWw0MzNpMVNzQk9PQWhBWlVFeHVGcmxxOWEwYXp4NkNHbDR0TTR1NGdGWE5Md0ZyQU1jQS9jRmRMZm9rZXloWllSek1CeGpGYzhhQjZaUFFOZm5hdmluWW81ckhEd3hKai8xRzYyL1hjdUVhNXJDblNxNE0wNTQyZDErbFVyY2h1UmUwRXN0dmV3OUpZNGdsZHdBa2ViOGQxL0pGMFRqM0c1amV2Q2JTWFNmaHp4aUxPZlM4NnNwOTlhTUlnaWdwOXJ2dlpHTVNCZWNkdi9WTVBTaUZ3PT08L1NpZ25hdHVyZT48L0tleU9TQXV0aGVudGljYXRpb25YTUw+Cg=='
-                }
-            });
+      
  
             player.on('ready', function() {
 							// Setup dash + pr/wv
 							var wvprDashSrc = {
-									src: 'https://channelstore.streamlytv.com/streamly/AETVP.stream/manifest.mpd',
+									src: 'https://livesim.dashif.org/livesim/chunkdur_1/ato_7/testpic4_8s/Manifest.mpd',
 									type: 'application/dash+xml',
-									keySystems: {
-											'com.widevine.alpha': 'https://wv-keyos.licensekeyserver.com/',
-											'com.microsoft.playready': 'https://pr-keyos.licensekeyserver.com/core/rightsmanager.asmx'
-									}
+								
 							};
 
 							// Set the source to the player to init/start the playback.
@@ -59,6 +54,14 @@
 
 							$("#change").on('click', function () {
 								var new_url = $("#myInput").val();
+								var encstr = $("#encstr").val();
+                if(encstr !== null){
+                player.eme({
+                // If you are using proxy, please, remove 'emeHeaders' block. Only 'player.eme();' should stay to register eme plugin.
+                emeHeaders: {
+                    'customdata': encstr
+                }
+            });}
 								var changed = {
 									src: new_url,
 									type: 'application/dash+xml',
