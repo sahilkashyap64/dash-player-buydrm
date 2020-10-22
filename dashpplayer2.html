@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+ 
+    <link href="https://s3.amazonaws.com/cdn.keyos.com/html5/videojs/7.5.4/video-js.min.css" rel="stylesheet">
+  
+    <script src="https://s3.amazonaws.com/cdn.keyos.com/html5/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://s3.amazonaws.com/cdn.keyos.com/html5/videojs/7.5.4/video.min.js"></script>
+    <script src="https://s3.amazonaws.com/cdn.keyos.com/html5/videojs-contrib-eme/3.5.4/videojs-contrib-eme.min.js"></script>
+    <script src="./dist/videojs-http-source-selector.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
+    <style>.video-js.vjs-http-source-selector{display:block}</style>
+</head>
+<body>
+    <video id="my-player" width="600" height="300" class="video-js vjs-default-skin" controls></video>
+ 
+    <script type="text/javascript">
+        (function() {
+            // Init player.
+            var player = videojs('my-player');
+            player.httpSourceSelector();
+            // Init eme plugin to work with DRM. Set header common for all license related requests: https://github.com/videojs/videojs-contrib-eme/tree/v3.5.0#emeheaders
+            player.eme({
+                // If you are using proxy, please, remove 'emeHeaders' block. Only 'player.eme();' should stay to register eme plugin.
+                emeHeaders: {
+                    'customdata': 'PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxLZXlPU0F1dGhlbnRpY2F0aW9uWE1MPjxEYXRhPjxXaWRldmluZVBvbGljeSBmbF9DYW5QZXJzaXN0PSJmYWxzZSIgZmxfQ2FuUGxheT0idHJ1ZSIvPjxXaWRldmluZUNvbnRlbnRLZXlTcGVjIFRyYWNrVHlwZT0iSEQiPjxTZWN1cml0eUxldmVsPjE8L1NlY3VyaXR5TGV2ZWw+PC9XaWRldmluZUNvbnRlbnRLZXlTcGVjPjxGYWlyUGxheVBvbGljeSBwZXJzaXN0ZW50PSJmYWxzZSIvPjxMaWNlbnNlIHR5cGU9InNpbXBsZSIvPjxHZW5lcmF0aW9uVGltZT4yMDIwLTEwLTIxIDE1OjQ0OjI1LjAwMDwvR2VuZXJhdGlvblRpbWU+PEV4cGlyYXRpb25UaW1lPjIwMjAtMTAtMjIgMTU6NDQ6MjUuMDAwPC9FeHBpcmF0aW9uVGltZT48VW5pcXVlSWQ+M2E0OGVkNDUwNjdjZjUxNGVmOWYxMTRiY2FlNjU1Y2U8L1VuaXF1ZUlkPjxSU0FQdWJLZXlJZD45NzU0ZTBjZmRkYzY4MmMyMTIxNmRlM2ViNGQxMTg4NTwvUlNBUHViS2V5SWQ+PC9EYXRhPjxTaWduYXR1cmU+cVVWakRicVhaSHJLaXU3QVZ2UmwrdndoZVZZYW4wbmp3VXdtdHFtR2VnNFc4VVZFMkdXMitGSFdtWjY0QU1Hd2lrSHp3NTkyMnFOT3d0YnkwK2VVSmVRUURsRCtqV2g5cVJEWGZBNjUxUzB4UUgrVXZWSFpJaFhFN3Nuc053OGwvcDRwQzduVEwyK2VPNHhzNmoycFJLSlozUC9KeWhoQjIxT2prUjBWUjNDTS8zZFRiUUZNOVd2dXRNM1gvVkRCQnMweXM1MUtOaDA4UWplWEV3WS9mTDBtUjVGeXViZ25DVU4wUUNGOE82TUZrRHkxWk5lQ1FZUzhrd2RmVFliMTc1OFpRYnRQQ256QWVGTlZhZVdzSnBTQzlhbkRpSVpsWC9aMXFIOWMrZWI4V2xmMHNiNHRsMm1XdFNOWndBaU9mMXhqUUpvUUFjZ2tyNXhGcGJMMmFnPT08L1NpZ25hdHVyZT48L0tleU9TQXV0aGVudGljYXRpb25YTUw+Cg=='
+                }
+            });
+ 
+            player.on('ready', function() {
+                // Setup dash + pr/wv
+                var wvprDashSrc = {
+                    src: 'https://cdn.streamlytv.com/streamly/ngrp:AETVP.stream_all/manifest.mpd',
+                    type: 'application/dash+xml',
+                    keySystems: {
+                        'com.widevine.alpha': 'https://wv-keyos.licensekeyserver.com/',
+                        'com.microsoft.playready': 'https://pr-keyos.licensekeyserver.com/core/rightsmanager.asmx'
+                    }
+                };
+ 
+                // Set the source to the player to init/start the playback.
+                player.src(wvprDashSrc);
+            });
+        })();
+    </script>
+</body>
+</html>
